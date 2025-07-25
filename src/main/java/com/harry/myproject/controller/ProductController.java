@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -22,8 +23,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getProducts() {
+        List<Product> products = productService.getProducts();
+        return ResponseEntity.ok().body(products);
+    }
+
+    // 查詢商品
     @GetMapping("/products/{productId}")
-    public ResponseEntity<?> search(@PathVariable Integer productId) {
+    public ResponseEntity<?> getProduct(@PathVariable Integer productId) {
         Product product = productService.getProductById(productId);
         if(product != null){
             return ResponseEntity.ok(product);
@@ -31,6 +39,7 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
+    // 新增商品
     @PostMapping("/products")
     public ResponseEntity<?> createProduct(@RequestBody @Valid ProductRequest productRequest){
         Integer productId = productService.createProduct(productRequest);
@@ -38,6 +47,7 @@ public class ProductController {
         Product product = productService.getProductById(productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
+    // 更新商品
     @PutMapping("/products/{productId}")
     public ResponseEntity<?> upDateProduct(@PathVariable Integer productId,
                                            @RequestBody @Valid ProductRequest productRequest){
@@ -52,6 +62,7 @@ public class ProductController {
         return ResponseEntity.ok(newProduct);
 
     }
+    // 刪除商品
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Integer productId){
         productService.deleteProduct(productId);

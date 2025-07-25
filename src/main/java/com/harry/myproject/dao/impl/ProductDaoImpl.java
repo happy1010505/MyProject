@@ -24,7 +24,8 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Product getProductById(Integer productId) {
-        String sql = "SELECT product_id,product_name,category,image_url,price,stock,description,created_date,last_modified_date FROM product WHERE product_id=:id";
+        String sql = "SELECT product_id,product_name,category,image_url,price,stock,description," +
+                     "created_date,last_modified_date FROM product WHERE product_id=:id";
         Map<String,Object> map = new HashMap<>();
         map.put("id", productId);
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
@@ -56,7 +57,8 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public void updateProduct(Integer productId,ProductRequest productRequest) {
-        String sql = "UPDATE product SET product_name = :productName,category = :category,image_url = :imageUrl,price = :price,stock = :stock,description = :description,last_modified_date = :lastModifiedDate WHERE product_id = :productId ";
+        String sql = "UPDATE product SET product_name = :productName,category = :category,image_url = :imageUrl," +
+                     "price = :price,stock = :stock,description = :description,last_modified_date = :lastModifiedDate WHERE product_id = :productId ";
         Map<String,Object> map = new HashMap<>();
         map.put("productId",productId);
         map.put("productName", productRequest.getProductName());
@@ -76,5 +78,18 @@ public class ProductDaoImpl implements ProductDao {
         Map<String,Object> map = new HashMap<>();
         map.put("productId", productId);
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    @Override
+    public List<Product> getProducts() {
+        String sql = "SELECT product_id,product_name,category,image_url,price,stock,description,"+
+                     "created_date,last_modified_date FROM product ";
+        Map<String,Object> map = new HashMap<>();
+        List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());
+        if(productList.isEmpty()){
+            return null;
+        }else{
+            return productList;
+        }
     }
 }
