@@ -1,5 +1,6 @@
 package com.harry.myproject.dao.impl;
 
+import com.harry.myproject.Constant.ProductCategory;
 import com.harry.myproject.dao.ProductDao;
 import com.harry.myproject.dto.ProductRequest;
 import com.harry.myproject.rowMapper.ProductRowMapper;
@@ -81,15 +82,21 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory productCategory,String search) {
         String sql = "SELECT product_id,product_name,category,image_url,price,stock,description,"+
-                     "created_date,last_modified_date FROM product ";
+                     "created_date,last_modified_date FROM product WHERE 1=1 ";
         Map<String,Object> map = new HashMap<>();
-        List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());
-        if(productList.isEmpty()){
-            return null;
-        }else{
-            return productList;
+
+        if(productCategory != null){
+            sql += " AND category = :category";
+            map.put("category", productCategory.name());
         }
+        if(search != null){
+            sql += " AND product_name LIKE :search";
+            map.put("search", "%" +search+ "%");
+        }
+
+        List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());
+        return productList;
     }
 }

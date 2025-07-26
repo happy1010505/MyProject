@@ -1,5 +1,6 @@
 package com.harry.myproject.dao;
 
+import com.harry.myproject.Constant.ProductCategory;
 import com.harry.myproject.dto.ProductRequest;
 import com.harry.myproject.model.Product;
 
@@ -10,5 +11,5 @@ public interface ProductDao {
     Integer createProduct(ProductRequest productRequest);
     void updateProduct(Integer productId,ProductRequest productRequest);
     void deleteProduct(Integer productId);
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategory productCategory, String search);
 }
