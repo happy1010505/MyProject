@@ -1,6 +1,7 @@
 package com.harry.myproject.controller;
 
 import com.harry.myproject.Constant.ProductCategory;
+import com.harry.myproject.dto.ProductQueryParam;
 import com.harry.myproject.dto.ProductRequest;
 import com.harry.myproject.model.Product;
 import com.harry.myproject.service.ProductService;
@@ -28,7 +29,10 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(@RequestParam (required = false) ProductCategory productCategory,
                                                      @RequestParam (required = false) String search) {
-        List<Product> products = productService.getProducts(productCategory , search);
+        ProductQueryParam productQueryParam = new ProductQueryParam();
+        productQueryParam.setProductCategory(productCategory);
+        productQueryParam.setSearch(search);
+        List<Product> products = productService.getProducts(productQueryParam);
         return ResponseEntity.ok().body(products);
     }
 

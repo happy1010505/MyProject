@@ -2,6 +2,7 @@ package com.harry.myproject.service.impl;
 
 import com.harry.myproject.Constant.ProductCategory;
 import com.harry.myproject.dao.ProductDao;
+import com.harry.myproject.dto.ProductQueryParam;
 import com.harry.myproject.dto.ProductRequest;
 import com.harry.myproject.model.Product;
 import com.harry.myproject.service.ProductService;
@@ -37,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts(ProductCategory productCategory,String search) {
-        return productDao.getProducts(productCategory,search);
+    public List<Product> getProducts(ProductQueryParam productQueryParam) {
+        return productDao.getProducts(productQueryParam);
     }
 }
