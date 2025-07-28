@@ -1,6 +1,5 @@
 package com.harry.myproject.dao;
 
-import com.harry.myproject.Constant.ProductCategory;
 import com.harry.myproject.dto.ProductQueryParam;
 import com.harry.myproject.dto.ProductRequest;
 import com.harry.myproject.model.Product;
