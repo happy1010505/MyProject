@@ -8,6 +8,7 @@ import com.harry.myproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,24 +19,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
+@Validated
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(@RequestParam (required = false) ProductCategory productCategory,
-                                                     @RequestParam (required = false) String search,
-                                                     @RequestParam (defaultValue = "created_date") String orderBy,
-                                                     @RequestParam (defaultValue = "desc") String sort) {
+    public ResponseEntity<List<Product>> getProducts(
+            // 查詢條件
+            @RequestParam (required = false) ProductCategory productCategory,
+            @RequestParam (required = false) String search,
+            // 排序
+            @RequestParam (defaultValue = "created_date") String orderBy,
+            @RequestParam (defaultValue = "desc") String sort,
+            // 分頁
+            @RequestParam (defaultValue = "5") @Min(0) @Max(1000) Integer limit,
+            @RequestParam (defaultValue = "0") @Min(0) Integer offset) {
         ProductQueryParam productQueryParam = new ProductQueryParam();
         productQueryParam.setProductCategory(productCategory);
         productQueryParam.setSearch(search);
         productQueryParam.setOrderBy(orderBy);
         productQueryParam.setSort(sort);
+        productQueryParam.setLimit(limit);
+        productQueryParam.setOffset(offset);
         List<Product> products = productService.getProducts(productQueryParam);
         return ResponseEntity.ok().body(products);
     }
