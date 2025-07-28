@@ -1,6 +1,7 @@
 package com.harry.myproject.service.impl;
 
 import com.harry.myproject.dao.UserDao;
+import com.harry.myproject.dto.UserLoginRequest;
 import com.harry.myproject.dto.UserRegisterRequest;
 import com.harry.myproject.model.User;
 import com.harry.myproject.service.UserService;
@@ -14,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserDao userDao;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         // 檢查註冊的email
         User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
         if (user != null) {
-            logger.warn("該 email {} 已經被註冊", userRegisterRequest.getEmail());
+            log.warn("該 email {} 已經被註冊", userRegisterRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         // 創建帳號
@@ -36,4 +37,18 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserById(userId);
     }
 
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+        if(user == null){
+            log.warn("該 email {} 尚未被註冊", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if(user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }else{
+            log.warn("email {} 的密碼不正確", userLoginRequest.getEmail());
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
