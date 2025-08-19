@@ -1,6 +1,7 @@
 package com.harry.myproject.controller;
 
 import com.harry.myproject.dto.CreatePrductRequest;
+import com.harry.myproject.model.Order;
 import com.harry.myproject.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,8 @@ public class OrderController {
 
         Integer orderId = orderService.createOrder(userId,createPrductRequest);
 
-        return ResponseEntity.ok().body(orderId);
+        Order order = orderService.getOrderById(orderId);
+        return ResponseEntity.ok().body(order);
 
     }
 }

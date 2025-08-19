@@ -4,6 +4,7 @@ import com.harry.myproject.dao.OrderDao;
 import com.harry.myproject.dao.ProductDao;
 import com.harry.myproject.dto.BuyItem;
 import com.harry.myproject.dto.CreatePrductRequest;
+import com.harry.myproject.model.Order;
 import com.harry.myproject.model.OrderItem;
 import com.harry.myproject.model.Product;
 import com.harry.myproject.service.OrderService;
@@ -50,5 +51,15 @@ public class OrderServiceImpl implements OrderService {
         orderDao.createOrderItems(orderId,orderItemList);
 
         return orderId;
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemById(orderId);
+        order.setOrderItemList(orderItemList);
+        return order;
     }
 }
