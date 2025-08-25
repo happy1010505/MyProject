@@ -1,11 +1,15 @@
 package com.harry.myproject.dao;
 
+import com.harry.myproject.dto.OrderQueryParams;
 import com.harry.myproject.model.Order;
 import com.harry.myproject.model.OrderItem;
 
 import java.util.List;
 
 public interface OrderDao {
+
+    List<Order> getOrders(OrderQueryParams orderQueryParams);
+    Integer getOrderCount(OrderQueryParams orderQueryParams);
     Integer createOrder(Integer userId,Integer totalAmount);
     void createOrderItems(Integer orderId, List<OrderItem>  orderItemList);
     Order getOrderById(Integer orderId);

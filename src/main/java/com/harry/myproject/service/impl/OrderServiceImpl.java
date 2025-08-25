@@ -5,6 +5,7 @@ import com.harry.myproject.dao.ProductDao;
 import com.harry.myproject.dao.UserDao;
 import com.harry.myproject.dto.BuyItem;
 import com.harry.myproject.dto.CreatePrductRequest;
+import com.harry.myproject.dto.OrderQueryParams;
 import com.harry.myproject.model.Order;
 import com.harry.myproject.model.OrderItem;
 import com.harry.myproject.model.Product;
@@ -91,5 +92,21 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItemList = orderDao.getOrderItemById(orderId);
         order.setOrderItemList(orderItemList);
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for(Order order : orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderItemById(order.getOrderId());
+            order.setOrderItemList(orderItemList);
+        }
+        return orderList;
+    }
+
+    @Override
+    public Integer getOrdersCount(OrderQueryParams orderQueryParams) {
+        return orderDao.getOrderCount(orderQueryParams);
     }
 }
